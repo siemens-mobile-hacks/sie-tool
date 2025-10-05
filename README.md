@@ -47,6 +47,8 @@ Memory dumper (CGSN):
   memory-read [options]      Read and save phone memory
   memory-read-all [options]  Read and save all available phone memory blocks
   memory-list                List available memory blocks
+
+Screenshotter (BFC):
   screenshot [options]       Make screenshot of phone screen
 
 Commands:
