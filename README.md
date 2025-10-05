@@ -51,6 +51,9 @@ Memory dumper (CGSN):
 Screenshotter (BFC):
   screenshot [options]       Make screenshot of phone screen
 
+Boot:
+  boot [options]             Boot code to the phone
+
 Commands:
   list-ports                 List available serial ports.
   help [command]             display help for command
