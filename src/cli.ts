@@ -77,7 +77,7 @@ program
 	.option('-d, --display <index>', 'Display number (0-based)', '0')
 	.option('-o, --output [file]', 'Write output to file or directory')
 	.action(createAppCommand(cliMakeScreenshot))
-	.helpGroup(GROUP_MEMORY_DUMPER);
+	.helpGroup(GROUP_SCREENSHOTTER);
 
 /**
  * MISC
