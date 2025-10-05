@@ -7,6 +7,7 @@ import { getDefaultPort } from "#src/utils/serial.js";
 import { cliListSerialPorts } from "#src/cli/misc.js";
 import { getVersion } from "#src/utils/version.js";
 import { cliMakeScreenshot } from "#src/cli/screenshotter.js";
+import { cliBootCode } from "#src/cli/boot.js";
 
 export interface CLIBaseOptions {
 	port: string;
@@ -18,6 +19,7 @@ const DEFAULT_PORT = await getDefaultPort();
 const GROUP_MISC = "Commands:";
 const GROUP_MEMORY_DUMPER = "Memory dumper (CGSN):";
 const GROUP_SCREENSHOTTER = "Screenshotter (BFC):";
+const GROUP_BOOT = "Boot:";
 
 program
 	.name("sie-tool")
@@ -78,6 +80,19 @@ program
 	.option('-o, --output [file]', 'Write output to file or directory')
 	.action(createAppCommand(cliMakeScreenshot))
 	.helpGroup(GROUP_SCREENSHOTTER);
+
+/**
+ * Boot
+ */
+program
+	.command('boot')
+	.description('Boot code to the phone')
+	.option('-i, --input [file]', 'Path to boot.bin or NormalMode, ServiceMode, BurninMode', 'ServiceMode')
+	.option('-f, --follow', 'Print boot code response to stdout', false)
+	.option('-H, --hex', 'Print boot code response in hex', false)
+	.option('--ignition <on|off|invert>', 'Auto-ignition mode', 'on')
+	.action(createAppCommand(cliBootCode))
+	.helpGroup(GROUP_BOOT);
 
 /**
  * MISC
