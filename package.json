@@ -27,23 +27,23 @@
 	"packageManager": "pnpm@10.18.0+sha512.e804f889f1cecc40d572db084eec3e4881739f8dec69c0ff10d2d1beff9a4e309383ba27b5b750059d7f4c149535b6cd0d2cb1ed3aeb739239a4284a68f40cfa",
 	"devDependencies": {
 		"@types/cli-progress": "^3.11.6",
-		"@types/node": "^24.6.2",
+		"@types/node": "^24.12.0",
 		"@types/sprintf-js": "^1.1.4",
-		"tsx": "^4.20.6",
+		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	},
 	"imports": {
 		"#src/*": "./dist/src/*"
 	},
 	"dependencies": {
-		"@sie-js/serial": "^1.1.13",
+		"@sie-js/serial": "^1.1.16",
 		"@types/debug": "^4.1.12",
 		"@types/luxon": "^3.7.1",
 		"chalk": "^5.6.2",
 		"cli-progress": "^3.12.0",
-		"commander": "^14.0.1",
+		"commander": "^14.0.3",
 		"debug": "^4.4.3",
-		"inquirer": "^12.9.6",
+		"inquirer": "^12.11.1",
 		"jimp": "^1.6.0",
 		"luxon": "^3.7.2",
 		"serialport": "^13.0.0",
