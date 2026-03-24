@@ -7,7 +7,7 @@ A console utility for working with Siemens phones (SGold/SGold2).
 Works on all major operating systems: Linux, macOS, and Windows.
 
 > [!NOTE]
-> All these functions are also available from the browser: [Web Tools](https://siemens-mobile-hacks.github.io/web-tools/).
+> All these functions are also available from the browser: [Web Tools](https://tools.siepatch.dev).
 
 # INSTALL
 
