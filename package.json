@@ -35,9 +35,13 @@
 	"imports": {
 		"#src/*": "./dist/src/*"
 	},
+	"overrides": {
+		"@serialport/bindings-cpp": "$@serialport/bindings-cpp",
+		"debug": "$debug"
+	},
 	"dependencies": {
-		"@sie-js/node-serialport-bindings-cpp": "^0.0.2",
-		"@sie-js/serial": "^1.1.17",
+		"@serialport/bindings-cpp": "npm:@sie-js/node-serialport-bindings-cpp@^0.0.2",
+		"@sie-js/serial": "^1.1.19",
 		"@types/debug": "^4.1.13",
 		"@types/luxon": "^3.7.2",
 		"chalk": "^5.6.2",
