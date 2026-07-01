@@ -1,6 +1,6 @@
 {
 	"name": "@sie-js/sie-tool",
-	"version": "1.0.16",
+	"version": "1.0.17",
 	"description": "CLI tools for Siemens SGOLD phones.",
 	"bin": {
 		"sie-tool": "./dist/src/cli.js"
