@@ -2,7 +2,7 @@
 
 # SUMMARY
 
-A console utility for working with Siemens phones (SGold/SGold2).
+A console utility for working with Siemens phones (EGOLD/SGOLD/SGOLD2).
 
 Works on all major operating systems: Linux, macOS, and Windows.
 
@@ -43,12 +43,12 @@ Options:
   -V, --verbose              Increase verbosity
   -h, --help                 display help for command
 
-Memory dumper (CGSN):
+Memory dumper (CGSN/BFB):
   memory-read [options]      Read and save phone memory
   memory-read-all [options]  Read and save all available phone memory blocks
-  memory-list                List available memory blocks
+  memory-list [options]      List available memory blocks
 
-Screenshotter (BFC):
+Screenshotter (BFC/BFB):
   screenshot [options]       Make screenshot of phone screen
 
 Boot:
@@ -57,6 +57,15 @@ Boot:
 Commands:
   list-ports                 List available serial ports.
   help [command]             display help for command
+```
+
+The tool tries to guess the phone protocol automatically. You can also select it explicitly:
+
+```bash
+sie-tool memory-list --protocol bfb       # EGOLD
+sie-tool memory-list --protocol cgsn      # SGOLD/SGOLD2
+sie-tool screenshot --protocol bfb        # EGOLD
+sie-tool screenshot --protocol bfc        # SGOLD/SGOLD2
 ```
 
 # AI-assisted contributions

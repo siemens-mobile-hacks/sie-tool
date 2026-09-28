@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 import { program } from "commander";
-import { cliListMemory, cliReadAllMemory, cliReadMemory } from "./cli/memory.js";
+import { cliListMemory, cliReadAllMemory, cliReadMemory } from "./cli/memory/index.js";
 import { createAppCommand } from "./utils/command.js";
 import debug from "debug";
 import { getDefaultPort } from "#src/utils/serial.js";
 import { cliListSerialPorts } from "#src/cli/misc.js";
 import { getVersion } from "#src/utils/version.js";
-import { cliMakeScreenshot } from "#src/cli/screenshotter.js";
-import { cliBootCode } from "#src/cli/boot.js";
+import { cliMakeScreenshot } from "#src/cli/screenshot/index.js";
+import { cliBootCode } from "#src/cli/boot/index.js";
 
 export interface CLIBaseOptions {
 	port: string;
@@ -17,8 +17,8 @@ export interface CLIBaseOptions {
 const DEFAULT_PORT = await getDefaultPort();
 
 const GROUP_MISC = "Commands:";
-const GROUP_MEMORY_DUMPER = "Memory dumper (CGSN):";
-const GROUP_SCREENSHOTTER = "Screenshotter (BFC):";
+const GROUP_MEMORY_DUMPER = "Memory dumper (CGSN/BFB):";
+const GROUP_SCREENSHOTTER = "Screenshotter (BFC/BFB):";
 const GROUP_BOOT = "Boot:";
 
 program
@@ -31,9 +31,9 @@ program
 	.hook('preAction', (thisCommand) => {
 		const opts = thisCommand.opts() as { verbose?: number };
 		if (opts.verbose) {
-			const filters = ["atc", "bfc", "bsl", "chaos"];
+			const filters = ["atc", "bfb", "bfc", "bsl", "chaos"];
 			if (opts.verbose >= 2)
-				filters.push("atc:*", "bfc:*", "bsl:*", "chaos:*");
+				filters.push("atc:*", "bfb:*", "bfc:*", "bsl:*", "chaos:*");
 			if (opts.verbose >= 3)
 				filters.push("*");
 			debug.enable(filters.join(","));
@@ -48,6 +48,7 @@ program
 program
 	.command('memory-read')
 	.description('Read and save phone memory')
+	.option('--protocol <auto|cgsn|bfb>', 'Phone protocol', 'auto')
 	.option('-n, --name <blockName>', 'Read by block name')
 	.option('-a, --addr <address>', 'Read from address (dec or hex)')
 	.option('-s, --size <bytes>', 'Size in bytes (dec, hex, k/m/g allowed)')
@@ -58,6 +59,7 @@ program
 program
 	.command('memory-read-all')
 	.description('Read and save all available phone memory blocks')
+	.option('--protocol <auto|cgsn|bfb>', 'Phone protocol', 'auto')
 	.option('-i, --include <blocks>', 'Include blocks (comma separated)', (v) => v.split(','), [])
 	.option('-e, --exclude <blocks>', 'Exclude blocks (comma separated)', (v) => v.split(','), [])
 	.option('-o, --output [dir]', 'Write output to directory')
@@ -67,6 +69,7 @@ program
 program
 	.command('memory-list')
 	.description('List available memory blocks')
+	.option('--protocol <auto|cgsn|bfb>', 'Phone protocol', 'auto')
 	.action(createAppCommand(cliListMemory))
 	.helpGroup(GROUP_MEMORY_DUMPER);
 
@@ -76,6 +79,7 @@ program
 program
 	.command('screenshot')
 	.description('Make screenshot of phone screen')
+	.option('--protocol <auto|bfc|bfb>', 'Phone protocol', 'auto')
 	.option('-d, --display <index>', 'Display number (0-based)', '0')
 	.option('-o, --output [file]', 'Write output to file or directory')
 	.action(createAppCommand(cliMakeScreenshot))

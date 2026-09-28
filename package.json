@@ -1,7 +1,7 @@
 {
 	"name": "@sie-js/sie-tool",
 	"version": "1.0.18",
-	"description": "CLI tools for Siemens SGOLD phones.",
+	"description": "CLI tools for Siemens EGOLD and SGOLD phones.",
 	"bin": {
 		"sie-tool": "./dist/src/cli.js"
 	},
@@ -18,7 +18,7 @@
 	"scripts": {
 		"build": "tsc",
 		"watch": "tsc -w",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "tsx --test tests/*.test.ts"
 	},
 	"keywords": [
 		"apoxi"

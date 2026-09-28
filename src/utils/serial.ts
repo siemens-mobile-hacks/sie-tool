@@ -1,4 +1,4 @@
-import { AsyncSerialPort, BFC, CGSN } from "@sie-js/serial";
+import { AsyncSerialPort, AtChannel } from "@sie-js/serial";
 import { SerialPort } from "serialport";
 
 const USB_DEVICES = [
@@ -9,68 +9,55 @@ const USB_DEVICES = [
 	"11F5:*",		// Siemens
 ];
 
-export async function connectCGSN(path: string, limitBaudrate: number): Promise<CGSN> {
-	console.info(`Connecting to the phone using port ${path} (CGSN)...`);
+export type PhonePlatform = "egold" | "sgold";
 
+function parseSqwePlatform(lines: string[]): PhonePlatform | undefined {
+	for (const line of lines) {
+		if (/^\s*\^SBFB\s*:/i.test(line))
+			return "egold";
+
+		if (/^\s*\^SQWE\s*:/i.test(line))
+			return /\b5\b/.test(line) ? "sgold" : "egold";
+	}
+	return undefined;
+}
+
+export async function probePhonePlatform(path: string): Promise<PhonePlatform> {
 	const port = new AsyncSerialPort(new SerialPort({
 		path,
-		baudRate: 112500,
+		baudRate: 115200,
 		autoOpen: false
 	}));
 	await port.open();
 
-	const cgsn = new CGSN(port);
-	if (!await cgsn.connect()) {
-		await port.close();
-		console.error(`Error while connecting to the phone!`);
-		throw new Error("Error while connecting to the phone!");
-	}
-
-	if (!await cgsn.setBestBaudRate(limitBaudrate)) {
-		await port.close();
-		console.error(`Error while setting baudrate!`);
-		throw new Error("Error while setting baudrate!");
-	}
-
-	return cgsn;
-}
-
-export async function disconnectCGSN(cgsn: CGSN): Promise<void> {
-	const port = cgsn.getSerialPort();
-	if (port?.isOpen) {
-		await cgsn.disconnect();
-		await port.close();
-	}
-}
-
-export async function connectBFC(path: string, limitBaudrate: number): Promise<BFC> {
-	console.info(`Connecting to the phone using port ${path} (BFC)...`);
-
-	const port = new AsyncSerialPort(new SerialPort({
-		path,
-		baudRate: 112500,
-		autoOpen: false
-	}));
-	await port.open();
-
-	const bfc = new BFC(port);
+	const atc = new AtChannel(port);
 	try {
-		await bfc.connect();
-		await bfc.setBestBaudrate(limitBaudrate);
+		atc.start();
+		if (!await atc.handshake())
+			throw new Error("AT handshake failed.");
+
+		const attempts: string[] = [];
+		for (const command of ["AT^SQWE=?", "AT^SBFB=?"]) {
+			const response = await atc.sendCommandNoPrefixAll(command, 2000);
+			if (!response.success) {
+				attempts.push(`${command}: ${response.status}`);
+				continue;
+			}
+
+			const platform = parseSqwePlatform(response.lines);
+			if (platform)
+				return platform;
+			attempts.push(`${command}: ${response.lines.join(" | ") || "empty response"}`);
+		}
+
+		throw new Error(`No known platform response (${attempts.join("; ")}).`);
 	} catch (e) {
-		await port.close();
-		console.error(`Error while connecting to the phone!`);
-		throw e;
-	}
-
-	return bfc;
-}
-
-export async function disconnectBFC(bfc: BFC): Promise<void> {
-	const port = bfc.getSerialPort();
-	if (port?.isOpen) {
-		await bfc.disconnect();
-		await port.close();
+		const message = e instanceof Error ? e.message : String(e);
+		throw new Error(`Automatic platform detection failed: ${message} Specify --protocol explicitly.`);
+	} finally {
+		atc.stop();
+		if (port.isOpen)
+			await port.close();
 	}
 }
 
