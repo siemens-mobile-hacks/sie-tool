@@ -1,5 +1,5 @@
 export type BitmapType =
-	| "wb"
+	| "bw"
 	| "rgb332"
 	| "argb4444"
 	| "rgb565"
@@ -158,7 +158,7 @@ export function setPixelRGB332(x: number, y: number, w: number, _h: number, bitm
 
 export function getBitmapDecoder(type: BitmapType): BitmapPixelReader {
 	switch (type) {
-		case "wb":				return getPixelWB;
+		case "bw":				return getPixelWB;
 		case "rgb332":			return getPixelRGB332;
 		case "argb4444":		return getPixelARGB4444;
 		case "rgb565":			return getPixelRGB565;
@@ -171,7 +171,7 @@ export function getBitmapDecoder(type: BitmapType): BitmapPixelReader {
 
 export function getBitmapEncoder(type: BitmapType): BitmapPixelWriter {
 	switch (type) {
-		case "wb":				return setPixelWB;
+		case "bw":				return setPixelWB;
 		case "rgb332":			return setPixelRGB332;
 		case "argb4444":		return setPixelARGB4444;
 		case "rgb565":			return setPixelRGB565;

@@ -1,6 +1,17 @@
 packages:
   - .
 
+allowBuilds:
+  '@sie-js/node-serialport-bindings-cpp': true
+  esbuild: true
+
+catalog:
+  '@serialport/bindings-cpp': 'npm:@sie-js/node-serialport-bindings-cpp@^0.0.2'
+  debug: '^4.4.3'
+
+minimumReleaseAgeExclude:
+  - '@sie-js/serial@1.5.2'
+
 overrides:
-  '@serialport/bindings-cpp': '$@serialport/bindings-cpp'
-  'debug': '$debug'
+  '@serialport/bindings-cpp': 'catalog:'
+  debug: 'catalog:'
